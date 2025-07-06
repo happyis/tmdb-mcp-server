@@ -30,9 +30,66 @@ export class TMDBService {
   }
 
   // 🔍 영화 제목/키워드로 검색
-  async searchMovies(query: string, page = 1): Promise<MovieSearchResponse> {
-    const res = await this.tmdb.get('/search/movie', { params: { query, page } });
+  async searchMovies(query: string, page = 1, region?: string): Promise<MovieSearchResponse> {
+    const params: any = { query, page };
+    if (region) {
+      params.region = region;
+    }
+    const res = await this.tmdb.get('/search/movie', { params });
     return res.data;
+  }
+
+  // 🇰🇷 한국 영화 전용 검색
+  async discoverKoreanMovies(options: {
+    page?: number;
+    year?: number;
+    genre?: number;
+    sortBy?: string;
+  } = {}): Promise<MovieSearchResponse> {
+    const params = {
+      page: options.page || 1,
+      with_origin_country: 'KR',
+      sort_by: options.sortBy || 'popularity.desc',
+      ...(options.year && { year: options.year }),
+      ...(options.genre && { with_genres: options.genre })
+    };
+    
+    console.log('🇰🇷 discoverKoreanMovies API 호출 파라미터:', params);
+    
+    try {
+      const res = await this.tmdb.get('/discover/movie', { params });
+      console.log(`✅ discoverKoreanMovies API 응답: ${res.data.results?.length || 0}개 영화`);
+      return res.data;
+    } catch (error) {
+      console.error('❌ discoverKoreanMovies API 호출 실패:', error);
+      throw error;
+    }
+  }
+
+  // 🎬 일반 영화 discover 검색 (연도, 장르 등 필터링)
+  async discoverMovies(options: {
+    page?: number;
+    year?: number;
+    genre?: number;
+    sortBy?: string;
+  } = {}): Promise<MovieSearchResponse> {
+    const params = {
+      page: options.page || 1,
+      sort_by: options.sortBy || 'popularity.desc',
+      ...(options.year && { year: options.year }),
+      ...(options.genre && { with_genres: options.genre })
+    };
+    
+    console.log('🎬 discoverMovies API 호출 파라미터:', params);
+    
+    try {
+      const res = await this.tmdb.get('/discover/movie', { params });
+      console.log(`✅ discoverMovies API 응답: ${res.data.results?.length || 0}개 영화`);
+      return res.data;
+    } catch (error) {
+      console.error('❌ discoverMovies API 호출 실패:', error);
+      throw error;
+    }
   }
 
   // 🎬 영화 상세정보 조회

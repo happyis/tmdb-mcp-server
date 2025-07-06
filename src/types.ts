@@ -1,6 +1,7 @@
 // TMDB API 기본 설정 타입
 export interface TMDBConfig {
   tmdbApiKey: string;
+  openaiApiKey?: string; // OpenAI API 키 (선택사항)
 }
 
 // 기본 응답 타입

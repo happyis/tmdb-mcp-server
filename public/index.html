@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎬 TMDB 영화 검색</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">
+                    <i class="fas fa-film"></i>
+                    TMDB 영화 검색
+                </h1>
+                <nav class="nav-menu">
+                    <button class="nav-btn active" data-section="search">
+                        <i class="fas fa-search"></i>
+                        검색
+                    </button>
+                    <button class="nav-btn" data-section="popular">
+                        <i class="fas fa-fire"></i>
+                        인기 영화
+                    </button>
+                    <button class="nav-btn" data-section="now-playing">
+                        <i class="fas fa-play"></i>
+                        현재 상영
+                    </button>
+                    <button class="nav-btn" data-section="top-rated">
+                        <i class="fas fa-star"></i>
+                        평점 높은 영화
+                    </button>
+                    <button class="nav-btn" data-section="favorites">
+                        <i class="fas fa-heart"></i>
+                        찜 목록
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="main">
+        <div class="container">
+            
+            <!-- 검색 섹션 -->
+            <section id="search-section" class="section active">
+                <div class="search-container">
+                    <h2>🔍 자연어 영화 검색</h2>
+                    <p class="search-description">
+                        "좀비 영화 추천해줘", "2023년 액션 영화", "평점 높은 로맨스 영화" 등 자연스럽게 검색해보세요!
+                    </p>
+                    
+                    <!-- 검색 폼 -->
+                    <form class="search-form" id="search-form">
+                        <div class="search-input-container">
+                            <input 
+                                type="text" 
+                                id="search-input" 
+                                class="search-input" 
+                                placeholder="예: 좀비 영화 추천해줘, 톰 크루즈 영화, 2023년 액션 영화"
+                                autocomplete="off"
+                            >
+                            <button type="submit" class="search-btn" id="search-btn">
+                                <i class="fas fa-search"></i>
+                                검색
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- 검색 기록 -->
+                    <div class="search-history" id="search-history">
+                        <h3>🕐 최근 검색</h3>
+                        <div class="history-tags" id="history-tags">
+                            <!-- 검색 기록이 여기에 동적으로 추가됩니다 -->
+                        </div>
+                    </div>
+
+                    <!-- 추천 검색어 -->
+                    <div class="suggested-searches">
+                        <h3>💡 추천 검색어</h3>
+                        <div class="suggestion-tags">
+                            <span class="suggestion-tag" data-query="좀비 영화 추천해줘">좀비 영화</span>
+                            <span class="suggestion-tag" data-query="2023년 액션 영화">2023년 액션</span>
+                            <span class="suggestion-tag" data-query="평점 높은 로맨스 영화">평점 높은 로맨스</span>
+                            <span class="suggestion-tag" data-query="마블 영화">마블 영화</span>
+                            <span class="suggestion-tag" data-query="한국 영화">한국 영화</span>
+                            <span class="suggestion-tag" data-query="애니메이션 영화">애니메이션</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 검색 결과 -->
+                <div class="search-results" id="search-results">
+                    <!-- 검색 결과가 여기에 동적으로 추가됩니다 -->
+                </div>
+            </section>
+
+            <!-- 다른 섹션들 -->
+            <section id="popular-section" class="section">
+                <h2>🔥 인기 영화</h2>
+                <div class="movies-grid" id="popular-movies">
+                    <!-- 인기 영화가 여기에 동적으로 추가됩니다 -->
+                </div>
+            </section>
+
+            <section id="now-playing-section" class="section">
+                <h2>🎥 현재 상영 중인 영화</h2>
+                <div class="movies-grid" id="now-playing-movies">
+                    <!-- 현재 상영 영화가 여기에 동적으로 추가됩니다 -->
+                </div>
+            </section>
+
+            <section id="top-rated-section" class="section">
+                <h2>⭐ 평점 높은 영화</h2>
+                <div class="movies-grid" id="top-rated-movies">
+                    <!-- 평점 높은 영화가 여기에 동적으로 추가됩니다 -->
+                </div>
+            </section>
+
+            <section id="favorites-section" class="section">
+                <h2>❤️ 찜 목록</h2>
+                <div class="favorites-container">
+                    <p class="empty-message" id="empty-favorites">
+                        아직 찜한 영화가 없습니다. 마음에 드는 영화에 ❤️를 눌러보세요!
+                    </p>
+                    <div class="movies-grid" id="favorites-movies">
+                        <!-- 찜한 영화가 여기에 동적으로 추가됩니다 -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 영화 상세 모달 -->
+    <div class="modal" id="movie-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">영화 제목</h2>
+                <button class="modal-close" id="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- 영화 상세 정보가 여기에 동적으로 추가됩니다 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 로딩 스피너 -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>영화 정보를 불러오는 중...</p>
+    </div>
+
+    <!-- 토스트 알림 -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">메시지</span>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html> 
