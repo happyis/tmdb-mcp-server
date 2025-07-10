@@ -51,9 +51,9 @@ export class MovieSearchService {
       
       console.log(`✅ TMDB 검색 완료: ${results.length}개 결과`);
 
-      // 3. GPT로 추천 설명 생성 (영화인 경우에만)
+      // 3. GPT로 추천 설명 생성 (영화인 경우에만, 결과가 3개 이상일 때만)
       let recommendation: string | undefined;
-      if (searchParams.type === 'movie' && results.length > 0) {
+      if (searchParams.type === 'movie' && results.length >= 3) {
         try {
           console.log('💡 추천 설명 생성 시작...');
           recommendation = await this.gptService.generateMovieRecommendation(results as Movie[], input);
@@ -62,6 +62,8 @@ export class MovieSearchService {
           console.error('⚠️ 추천 설명 생성 실패:', recError);
           recommendation = `"${input}" 검색 결과를 찾았습니다!`;
         }
+      } else if (searchParams.type === 'movie' && results.length > 0) {
+        recommendation = `"${input}" 검색 결과를 찾았습니다!`;
       }
 
       return {
@@ -199,13 +201,13 @@ export class MovieSearchService {
     }
 
     // 장르 필터링 - discover에서 이미 장르 필터링 했으면 스킵
-    if (params.genre && !(params.country === '한국' && movies.length > 0)) {
+    if (params.genre && !usedDiscoverAPI) {
       console.log(`🎭 장르 필터링 시작: ${params.genre}`);
       const genreId = this.getGenreId(params.genre);
       console.log(`📋 장르 ID: ${genreId}`);
       const beforeCount = movies.length;
       
-      movies = movies.filter(movie => {
+      const filteredMovies = movies.filter(movie => {
         const hasGenre = movie.genre_ids?.some(id => id === genreId);
         if (hasGenre) {
           console.log(`✅ 장르 매치: ${movie.title} (${movie.genre_ids})`);
@@ -213,7 +215,15 @@ export class MovieSearchService {
         return hasGenre;
       });
       
-      console.log(`📊 장르 필터링: ${beforeCount}개 → ${movies.length}개`);
+      console.log(`📊 장르 필터링: ${beforeCount}개 → ${filteredMovies.length}개`);
+      
+      // 장르 필터링 후 결과가 있으면 적용, 없으면 원본 유지
+      if (filteredMovies.length > 0) {
+        movies = filteredMovies;
+        console.log('✅ 장르 필터링 적용됨');
+      } else {
+        console.log('⚠️ 장르 필터링 결과 없음, 원본 결과 유지');
+      }
     }
 
     // 연도 필터링

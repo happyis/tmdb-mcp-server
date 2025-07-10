@@ -76,6 +76,8 @@ export class GPTService {
 - "가을 배경이 나온 한국 영화" → {"query": "autumn korean", "type": "movie", "country": "한국", "season": "가을", "keywords": ["autumn", "fall"], "setting": "자연"}
 - "봄에 나온 로맨스 영화" → {"query": "spring romance", "genre": "Romance", "season": "봄", "keywords": ["spring", "romance"]}
 - "학교 배경의 한국 영화" → {"query": "school korean", "type": "movie", "country": "한국", "setting": "학교", "keywords": ["school", "student"]}
+- "우주 영화 추천해줘" → {"query": "space", "genre": "Science Fiction", "type": "movie", "sortBy": "popularity", "keywords": ["space", "sci-fi", "우주"]}
+- "SF 영화" → {"query": "science fiction", "genre": "Science Fiction", "type": "movie", "sortBy": "popularity"}
 
 응답은 반드시 JSON 형식만 반환하세요.
 `;
